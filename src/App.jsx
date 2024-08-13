@@ -4,6 +4,7 @@ import Header from './components/Header.jsx';
 import Shop from './components/Shop.jsx';
 import Product from './components/Product.jsx';
 import { DUMMY_PRODUCTS } from './dummy-products.js';
+import { CartContext } from './store/shopping-cart-context.jsx';
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState({
@@ -66,20 +67,26 @@ function App() {
     });
   }
 
+  const ctxValue = {
+    items: shoppingCart.items,
+    addItemToCart: handleAddItemToCart,
+    updateItemQuantity: handleUpdateCartItemQuantity
+  };
+
   return (
-    <>
+    <CartContext.Provider value={ ctxValue }>   
+     {/* // 컴포넌트에 확장자가 올바른 이름(Provider, consumer ...)이면 사용 가능 */ }
       <Header
-        cart={shoppingCart}
-        onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
+        
       />
       <Shop>
         {DUMMY_PRODUCTS.map((product) => (
           <li key={product.id}>
-            <Product {...product} onAddToCart={handleAddItemToCart} />
+            <Product {...product}  />
           </li>
         ))}
       </Shop>
-    </>
+    </CartContext.Provider>
   );
 }
 
